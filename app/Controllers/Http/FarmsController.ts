@@ -8,6 +8,20 @@ export default class FarmsController {
     response.ok(farms)
   }
 
+  public async read({ request, response }: HttpContextContract) {
+    const farm = await Farm.query()
+      .where('id', request.param('id'))
+      .preload('state')
+      .preload('cultures')
+
+    if (farm.length === 0) {
+      response.notFound({ erro: 'Fazenda não encontrada' })
+      return
+    }
+
+    response.ok(farm)
+  }
+
   public async create({ request, response }: HttpContextContract) {
     const data = { ...request.body() }
     delete data.cultures
