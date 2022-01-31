@@ -1,13 +1,15 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 
-export default class Cultures extends BaseSchema {
-  protected tableName = 'cultures'
+export default class CultureFarm extends BaseSchema {
+  protected tableName = 'culture_farm'
 
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id').primary()
 
-      table.string('name').notNullable()
+      table.integer('farm_id').unsigned().references('farms.id')
+      table.integer('culture_id').unsigned().references('cultures.id')
+      table.unique(['farm_id', 'culture_id'])
 
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })
