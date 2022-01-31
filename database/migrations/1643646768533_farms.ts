@@ -7,7 +7,14 @@ export default class Farms extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id').primary()
 
-      table.integer('state_id').unsigned().index().references('states.id').notNullable()
+      table
+        .integer('state_id')
+        .unsigned()
+        .index()
+        .references('states.id')
+        .notNullable()
+        .onDelete('CASCADE')
+        .onUpdate('CASCADE')
 
       table.string('cpf_cnpj').notNullable()
       table.string('farmer_name').notNullable()

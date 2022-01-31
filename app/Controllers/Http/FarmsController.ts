@@ -46,4 +46,22 @@ export default class FarmsController {
 
     response.noContent()
   }
+
+  public async delete({ request, response }: HttpContextContract) {
+    const farm = await Farm.find(request.param('id'))
+
+    if (!farm) {
+      response.notFound({ erro: 'Fazenda não encontrada' })
+      return
+    }
+
+    await farm.delete()
+
+    if (!farm.$isDeleted) {
+      response.internalServerError({ erro: 'Erro ao tentar excluir fazenda' })
+      return
+    }
+
+    response.noContent()
+  }
 }

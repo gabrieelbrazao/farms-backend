@@ -4,4 +4,5 @@ Route.group(() => {
   Route.get('/', 'FarmsController.index')
   Route.post('/', 'FarmsController.create')
   Route.put('/:id', 'FarmsController.update')
+  Route.delete('/:id', 'FarmsController.delete')
 }).prefix('/farms')

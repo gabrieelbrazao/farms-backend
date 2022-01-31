@@ -7,8 +7,20 @@ export default class CultureFarm extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id').primary()
 
-      table.integer('farm_id').unsigned().references('farms.id')
-      table.integer('culture_id').unsigned().references('cultures.id')
+      table
+        .integer('farm_id')
+        .unsigned()
+        .references('farms.id')
+        .onDelete('CASCADE')
+        .onUpdate('CASCADE')
+
+      table
+        .integer('culture_id')
+        .unsigned()
+        .references('cultures.id')
+        .onDelete('CASCADE')
+        .onUpdate('CASCADE')
+
       table.unique(['farm_id', 'culture_id'])
 
       table.timestamp('created_at', { useTz: true })
