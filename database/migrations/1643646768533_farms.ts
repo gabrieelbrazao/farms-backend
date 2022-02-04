@@ -16,7 +16,8 @@ export default class Farms extends BaseSchema {
         .onDelete('CASCADE')
         .onUpdate('CASCADE')
 
-      table.string('cpf_cnpj').notNullable()
+      table.string('cpf', 14)
+      table.string('cnpj', 18)
       table.string('farmer_name').notNullable()
       table.string('farm_name').notNullable()
       table.string('city').notNullable()

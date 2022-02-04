@@ -4,6 +4,7 @@ import {
   BelongsTo,
   belongsTo,
   column,
+  computed,
   ManyToMany,
   manyToMany,
 } from '@ioc:Adonis/Lucid/Orm'
@@ -15,37 +16,50 @@ export default class Farm extends BaseModel {
   public id: number
 
   @column()
-  public cpfCnpj: string
+  public cpf: string
 
   @column()
+  public cnpj: string
+
+  @column({ serializeAs: 'farmerName' })
   public farmerName: string
 
-  @column()
+  @column({ serializeAs: 'farmName' })
   public farmName: string
 
   @column()
   public city: string
 
-  @column()
+  @column({ serializeAs: 'agriculturalArea' })
   public agriculturalArea: number
 
-  @column()
+  @column({ serializeAs: 'vegetationArea' })
   public vegetationArea: number
+
+  @computed()
+  public get totalArea() {
+    return this.vegetationArea + this.agriculturalArea
+  }
+
+  @computed()
+  public get cpfCnpj() {
+    return this.cpf ? this.cpf : this.cnpj
+  }
 
   @manyToMany(() => Culture, {
     pivotTimestamps: true,
   })
   public cultures: ManyToMany<typeof Culture>
 
-  @column()
+  @column({ serializeAs: null })
   public stateId: number
 
   @belongsTo(() => State)
   public state: BelongsTo<typeof State>
 
-  @column.dateTime({ autoCreate: true })
+  @column.dateTime({ autoCreate: true, serializeAs: null })
   public createdAt: DateTime
 
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  @column.dateTime({ autoCreate: true, autoUpdate: true, serializeAs: null })
   public updatedAt: DateTime
 }

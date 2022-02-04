@@ -4,7 +4,7 @@ import Farm from 'App/Models/Farm'
 
 export default class FarmsController {
   public async index({ response }: HttpContextContract) {
-    const farms = await Farm.query().preload('state').preload('cultures')
+    const farms = await Farm.query().preload('state').preload('cultures').orderBy('id', 'asc')
     response.ok(farms)
   }
 
