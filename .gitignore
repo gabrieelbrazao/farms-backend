@@ -4,6 +4,7 @@ coverage
 .vscode
 .DS_STORE
 .env
+.env.testing
 tmp
 .docker
 .pnpm-store
