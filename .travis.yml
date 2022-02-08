@@ -1,0 +1,7 @@
+language: node_js
+node_js:
+  - 17
+services:
+  - postgresql
+before_install:
+  - psql -c 'create database postgres_test;' -U postgres
