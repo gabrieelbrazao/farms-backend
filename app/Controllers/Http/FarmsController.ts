@@ -1,6 +1,7 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 import Farm from 'App/Models/Farm'
+import Ws from 'App/Services/Ws'
 
 export default class FarmsController {
   public async index({ response }: HttpContextContract) {
@@ -35,6 +36,9 @@ export default class FarmsController {
 
     farm.related('cultures').attach(request.body().cultures)
 
+    const resp = await Farm.query().where('id', farm.id).preload('state').preload('cultures')
+    Ws.io.emit('create:farm', { data: resp[0] })
+
     response.noContent()
   }
 
@@ -58,11 +62,15 @@ export default class FarmsController {
 
     await farm.related('cultures').sync(request.body().cultures)
 
+    const resp = await Farm.query().where('id', farm.id).preload('state').preload('cultures')
+    Ws.io.emit('update:farm', { data: resp[0] })
+
     response.noContent()
   }
 
   public async delete({ request, response }: HttpContextContract) {
-    const farm = await Farm.find(request.param('id'))
+    const id = request.param('id')
+    const farm = await Farm.find(id)
 
     if (!farm) {
       response.notFound({ erro: 'Fazenda não encontrada' })
@@ -76,6 +84,7 @@ export default class FarmsController {
       return
     }
 
+    Ws.io.emit('delete:farm', { id: farm.id })
     response.noContent()
   }
 }
